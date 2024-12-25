@@ -45,6 +45,9 @@
         <source src="./assets/bg-sound.mp3" type="audio/mp3">
     </audio>
 
+    <!-- Add this right after the body tag opens -->
+    <div class="snow-container"></div>
+
     <script>
         let currentLevel = 1;
         let actualRaccoonCount = 0;
@@ -434,6 +437,79 @@
         copyright.className = 'copyright';
         copyright.innerHTML = '© 2024 <a href="https://github.com/mnalfiansyah" target="_blank">Dolpin</a>';
         document.body.appendChild(copyright);
+
+        // Create snow effect
+        function createSnow() {
+            const snowContainer = document.querySelector('.snow-container');
+            const snowflakeCount = 50; // Adjust number of snowflakes
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snow = document.createElement('div');
+                snow.className = 'snow';
+                
+                // Random properties for each snowflake
+                const randomX = Math.random() * window.innerWidth;
+                const randomDuration = 5 + Math.random() * 10; // Between 5-15s
+                const randomDelay = Math.random() * 5; // Between 0-5s
+                const randomSize = 3 + Math.random() * 7; // Between 3-10px
+                const randomOpacity = 0.4 + Math.random() * 0.6; // Between 0.4-1
+
+                // Apply random styles
+                snow.style.left = `${randomX}px`;
+                snow.style.width = `${randomSize}px`;
+                snow.style.height = `${randomSize}px`;
+                snow.style.opacity = randomOpacity;
+                snow.style.animationDuration = `${randomDuration}s`;
+                snow.style.animationDelay = `${randomDelay}s`;
+
+                snowContainer.appendChild(snow);
+
+                // Remove and recreate snowflake after animation ends
+                snow.addEventListener('animationend', () => {
+                    snow.remove();
+                    createSnowflake();
+                });
+            }
+        }
+
+        // Create a single snowflake
+        function createSnowflake() {
+            const snowContainer = document.querySelector('.snow-container');
+            const snow = document.createElement('div');
+            snow.className = 'snow';
+            
+            const randomX = Math.random() * window.innerWidth;
+            const randomDuration = 5 + Math.random() * 10;
+            const randomSize = 3 + Math.random() * 7;
+            const randomOpacity = 0.4 + Math.random() * 0.6;
+
+            snow.style.left = `${randomX}px`;
+            snow.style.width = `${randomSize}px`;
+            snow.style.height = `${randomSize}px`;
+            snow.style.opacity = randomOpacity;
+            snow.style.animationDuration = `${randomDuration}s`;
+
+            snowContainer.appendChild(snow);
+
+            snow.addEventListener('animationend', () => {
+                snow.remove();
+                createSnowflake();
+            });
+        }
+
+        // Initialize snow effect
+        window.addEventListener('load', createSnow);
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const snowContainer = document.querySelector('.snow-container');
+                snowContainer.innerHTML = '';
+                createSnow();
+            }, 200);
+        });
     </script>
 </body>
 </html>
